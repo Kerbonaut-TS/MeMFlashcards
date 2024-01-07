@@ -1,44 +1,40 @@
+import java.io.IOException;
+
 import Modules.FlashcardGen;
-import Modules.WordsMng;
+import Modules.DataFrame;
+import filters.StatFilter;
 
 public class MemFC {
 
 	public static void main(String[] args) {
 		
-		
 		String[][] words;
 		
 		//text file with words
-		WordsMng wm = new WordsMng("C:\\Users\\Riccardo\\Dropbox\\MemorableFC\\wordsdb.csv");	
-		words = wm.getWords();
-
+		DataFrame wm = new DataFrame(".\\files\\wordsdb.csv");
 		
-		for (int w = 0; w<=115; w++) {
+		for (int w = 0; w<=259; w++) {
 			try {
 				
-				
-				
-					//where to find the images
-			        String img_dir = "C:\\Users\\Riccardo\\Dropbox\\MemorableFC\\Flashcards\\pics";
-			        
-				
-				    //Specify where to save the flashcards
-					String out_dir = "C:\\Users\\Riccardo\\Dropbox\\MemorableFC\\Flashcards";
-					
-					
-					if(wm.get_status(w) != 1) {
-											
-						//Create Flashcard
-						String filename = wm.get_ID(w) + ".jpg";
-					    System.out.println("create flashcard for " , wm.get_word(w)););
-	
-					    FlashcardGen fg = new FlashcardGen(img_dir);
-					    //fg.debug_sections(wm.get_word(w), wm.get_ID(w),  out_dir +"\\"+ filename);
-					    fg.create_flashcard(wm.get_word(w), wm.get_ID(w),  out_dir +"\\"+ filename);
-					    fg.create_flashcard(wm.get_eng(w), wm.get_ID(w),  out_dir +"\\eng\\"+ filename);
-					    
-					}else {System.out.println("Skipping card... " +  wm.get_word(w));}
-									 
+				//where to find the images
+				String img_dir = ".\\files\\pics";
+
+				//Specify where to save the flashcards
+				String out_dir = "C:\\Users\\Riccardo\\Dropbox\\MemorableFC\\";
+
+				//Create Flashcard
+				String imgname = wm.iloc(w,0);
+				String word_ell = wm.iloc(w,2);
+				String word_eng = wm.iloc(w,5);
+				FlashcardGen fg = new FlashcardGen();
+
+				System.out.println(imgname+") creating flashcard for " +  word_ell );
+
+				//create cards
+				fg.create_flashcard(word_ell, img_dir+"\\"+imgname,  out_dir +"\\"+ imgname+".jpg");
+				fg.create_flashcard(word_eng, img_dir+"\\"+imgname,  out_dir +"\\eng\\"+ imgname+".jpg");
+
+
 			} catch(Exception e ) { e.printStackTrace();}
 		}//end for
 		
